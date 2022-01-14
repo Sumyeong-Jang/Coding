@@ -1,0 +1,81 @@
+#include <iostream>
+#include <queue>
+#include <vector>
+#include <cstring>
+
+#define INF 200001
+
+using namespace std;
+
+struct Data {
+    int n, w;
+    Data() {};
+    Data(int n, int w) : n(n), w(w) {};
+
+    bool operator<(const Data d) const {
+        return w > d.w;
+    }
+};
+
+int V, E, K;
+int u, v, w;
+vector<Data> road[20001];
+priority_queue<Data> pq;
+bool isVisited[20001];
+int dist[20001];
+
+void init() {
+    for (int i = 0; i <= V; i++) {
+        road[i].clear();
+        dist[i] = INF; 
+        isVisited[i] = false;
+    }
+    priority_queue<Data> emptyPQ;
+    swap(pq, emptyPQ);
+}
+
+int main(int argc, char** argv) {
+    ios_base::sync_with_stdio(0);
+    cin.tie(0);
+
+    cin >> V >> E;
+    cin >> K;
+
+    init();
+
+    for (int i = 0; i < E; i++) {
+        cin >> u >> v >> w;
+        road[u].push_back(Data(v, w));
+    }
+
+    pq.push(Data(K, 0));
+    dist[K] = 0;
+
+    while (true) {
+        if (pq.empty()) break;
+        Data d = pq.top();
+        pq.pop();
+
+        if(isVisited[d.n]) continue;
+        isVisited[d.n] = true;
+
+        for (int i = 0; i < road[d.n].size(); i++) {
+            if (dist[road[d.n].at(i).n] > dist[d.n] + road[d.n].at(i).w) {
+                dist[road[d.n].at(i).n] = dist[d.n] + road[d.n].at(i).w;
+                pq.push(Data(road[d.n].at(i).n, dist[road[d.n].at(i).n]));
+            }
+        }
+    }
+
+    for (int i = 1; i <= V; i++) {
+        if (isVisited[i]) {
+            cout << dist[i];
+        }
+        else {
+            cout << "INF";
+        }
+        cout << endl;
+    }
+
+    return 0;
+}
