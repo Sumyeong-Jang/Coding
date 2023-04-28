@@ -17,15 +17,15 @@ def solution(N, road, K):
     dist[1] = 0
     
     dijkstra(roadmap, dist);
-    """
+    
     for d in dist:
-        print(d)
         if d <= K:
-            ansewr = answer + 1
+            answer = answer + 1
     """
     for i in range(1, len(dist)):
         if dist[i] <= K:
             answer = answer + 1
+    """
     print(answer)
     return answer
 
